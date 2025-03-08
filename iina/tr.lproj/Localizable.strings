@@ -16,6 +16,9 @@
 "general.username" = "Kullanıcı Adı";
 "general.password" = "Parola";
 
+"input.value_is_empty" = "Value cannot be empty.";
+"input.already_exists" = "Value already exists.";
+
 // Guide Window
 "guide.highlights" = "Öne Çıkanlar";
 "guide.basic_settings" = "Temel Ayarlar";
@@ -24,9 +27,12 @@
 // Initial Window
 "initial.announcement" = "Şu an IINA'nın %@ BETA sürümünü kullanıyorsunuz";
 "initial.beta.desc" = "Lütfen “Ayarlar > Genel” sekmesinden “Beta güncellemeleri al” seçeneğini kapatın ve <a href=\"https://iina.io\">resmi sitemizden</a> kararlı son sürümü indirin.";
-"initial.nightly.desc" = "Test edilmemiş sürümlerin günlük olarak kullanılması tavsiye edilmez. Şu anda test edilmemiş sürümler otomatik güncellemeyi desteklemiyor. Lütfen daha yeni test edilmemiş sürümleri <a href=\"https://nightly.iina.io\">test edilmemiş sürümler web sitemizden</a> manuel olarak indirin.";
+"initial.nightly.desc" = "Nightly is not recommended to be used as your daily driver. Currently nightly builds do not support auto update. Please manually download newer builds from our <a href=\"https://nightly.iina.io\">nightly website</a>.";
 "initial.debug.desc" = "Hata ayıklama amaçlı derlenmiş sürümler genellikle performans açısından optimize edilmediğinden günlük olarak kullanılması önerilmez. Hata ayıklama amaçlı sürümler otomatik güncellemeyi desteklemez.";
 "initial.bug_report" = "<a href=\"https://github.com/iina/iina/issues\">GitHub issues</a>. web sitesine raporlayabilirsiniz.";
+
+// Inspector Window
+"inspector.error" = "Hata";
 
 // MainWindowController.swift
 "main.buffering_indicator" = "Arabelleğe alınıyor... %%%d";
@@ -43,12 +49,43 @@
 "quicksetting.hwdec" = "Donanımsal Kod Çözücü";
 "quicksetting.deinterlace" = "Taramasızlık";
 "quicksetting.hdr" = "HDR";
+"quicksetting.hide" = "Gizle";
+"quicksetting.reset_speed" = "Reset speed to 1x";
+
+// EQ Presets
+"eq.preset.flat" = "Flat";
+"eq.preset.acoustic" = "Acoustic";
+"eq.preset.classical" = "Classical";
+"eq.preset.dance" = "Dance";
+"eq.preset.deep" = "Deep";
+"eq.preset.electronic" = "Electronic";
+"eq.preset.hip_hop" = "Hip Hop";
+"eq.preset.increase_bass" = "Increase Bass";
+"eq.preset.increase_treble" = "Increase Treble";
+"eq.preset.increase_vocal" = "Increase Vocal";
+"eq.preset.jazz" = "Jazz";
+"eq.preset.latin" = "Latin";
+"eq.preset.loundness" = "Loundness";
+"eq.preset.lounge" = "Lounge";
+"eq.preset.piano" = "Piano";
+"eq.preset.pop" = "Pop";
+"eq.preset.rnb" = "R&B";
+"eq.preset.reduce_bass" = "Reduce Bass";
+"eq.preset.reduce_treble" = "Reduce Treble";
+"eq.preset.rock" = "Rock";
+"eq.preset.small_speaker" = "Small Speaker";
+"eq.preset.spoken_word" = "Spoken Word";
+
+"alert.eq.new_profile.title" = "New EQ Profile";
+"alert.eq.new_profile.message" = "Please enter a profile name.";
+"alert.eq.rename.title" = "Rename Currnet Profile";
+"alert.eq.rename.message" = "Please enter a new profile name.";
 
 // OSDMessage.swift
 "osd.pause" = "Duraklat";
 "osd.resume" = "Sürdür";
 "osd.volume" = "Ses Yüksekliği: %i";
-"osd.speed" = "Hız: %.2fx";
+"osd.speed" = "Speed: %@x";
 "osd.aspect" = "En-Boy Oranı: %@";
 "osd.crop" = "Kırp: %@";
 "osd.rotate" = "Döndür: %i°";
@@ -61,6 +98,14 @@
 "osd.sub_delay.later" = "Altyazı Gecikmesi: %.2f sn Geç";
 "osd.sub_delay.earlier" = "Altyazı Gecikmesi: %.2f sn Erken";
 "osd.subtitle_pos" = "Altyazı Konumu: %.1f";
+"osd.sub_hidden" = "Subtitles Hidden";
+"osd.sub_visible" = "Subtitles Visible";
+"osd.sub_second_delay.nodelay" = "Secondary Subtitle Delay: No Delay";
+"osd.sub_second_delay.later" = "Secondary Subtitle Delay: %.2fs Later";
+"osd.sub_second_delay.earlier" = "Secondary Subtitle Delay: %.2fs Earlier";
+"osd.sub_second_hidden" = "Secondary Subtitles Hidden";
+"osd.sub_second_pos" = "Secondary Subtitle Position: %.1f";
+"osd.sub_second_visible" = "Secondary Subtitles Visible";
 "osd.mute" = "Sesi Kapat";
 "osd.unmute" = "Sesi Aç";
 "osd.screenshot" = "Ekran Görüntüsü Alındı";
@@ -80,7 +125,8 @@
 "osd.find_online_sub" = "Çevrimiçi altyazılar bulunuyor...";
 "osd.find_online_sub.source" = "şu siteden:";
 "osd.sub_not_found" = "Altyazı bulunamadı";
-"osd.sub_found" = "%d altyazı bulundu. İndiriliyor…";
+"osd.sub_found" = "%d subtitles found.";
+"osd.sub_downloading" = "Downloading %d subtitles";
 "osd.sub_downloaded" = "Altyazı indirildi";
 "osd.sub_saved" = "Altyazı kaydedildi";
 "osd.network_error" = "Ağ hatası";
@@ -116,14 +162,26 @@
 
 "preference.enable_adv_settings" = "Gelişmiş ayarları etkinleştir";
 
+"preference.sub_override_level.no" = "no";
 "preference.sub_override_level.force" = "force";
+"preference.sub_override_level.scale" = "scale";
 "preference.sub_override_level.strip" = "Sıyır";
 "preference.sub_override_level.yes" = "yes";
+
+"preference.sub_override_level.descriptive_text.no" = "Render subtitles as specified by the subtitle scripts, without overrides.";
+"preference.sub_override_level.descriptive_text.force" = "Apply all subtitle styles.";
+"preference.sub_override_level.descriptive_text.scale" = "Apply the scale setting in addition to the style settings in this section.";
+"preference.sub_override_level.descriptive_text.strip" = "Radically strip all ASS tags and styles from the subtitle.";
+"preference.sub_override_level.descriptive_text.yes" = "Apply all the style settings in this section.";
 
 "menu.volume" = "Ses Seviyesi: %d";
 "menu.volume_muted" = "Ses Yüksekliği: %d (Sessiz)";
 "menu.audio_delay" = "Ses Gecikmesi: %.2f sn";
 "menu.sub_delay" = "Altyazı Gecikmesi: %.2f sn";
+"menu.sub_hide" = "Hide Subtitles";
+"menu.sub_show" = "Show Subtitles";
+"menu.sub_second_hide" = "Hide Secondary Subtitles";
+"menu.sub_second_show" = "Show Secondary Subtitles";
 "menu.fullscreen" = "Tam Ekrana Geç";
 "menu.exit_fullscreen" = "Tam Ekrandan Çık";
 "menu.pip" = "Resim İçinde Resim'e Geç";
@@ -132,7 +190,7 @@
 "menu.exit_mini_player" = "Müzik Modundan Çık";
 "menu.pause" = "Duraklat";
 "menu.resume" = "Sürdür";
-"menu.speed" = "Hız: %.2fx";
+"menu.speed" = "Speed: %@x";
 "menu.chapters" = "Bölümler Panelini Göster";
 "menu.hide_chapters" = "Bölümler Panelini Gizle";
 "menu.playlist" = "Oynatma Listesi Paneli";
@@ -146,8 +204,8 @@
 
 "menu.seek_forward" = "%.0f sn İleriye Sar";
 "menu.seek_backward" = "%.0f sn Geriye Sar";
-"menu.speed_up" = "%.1fx Hızlandır";
-"menu.speed_down" = "%.1fx Yavaşlat";
+"menu.speed_up" = "Speed Up by %@x";
+"menu.speed_down" = "Speed Down by %@x";
 "menu.volume_up" = "Ses Seviyesi + %.0f%%";
 "menu.volume_down" = "Ses Seviyesi - %.0f%%";
 "menu.audio_delay_up" = "Ses Gecikmesi + %.1f sn";
@@ -158,7 +216,10 @@
 "menu.crop_custom" = "Özel...";
 "menu.find_online_sub" = "Çevrimiçi Altyazı Bul";
 
+"track.audio" = "Ses";
 "track.none" = "<Hiçbiri>";
+"track.sub" = "Altyazı";
+"track.video" = "Video";
 
 "subtrack.no_loaded" = "Yüklenmiş Altyazı Yok";
 "subtrack.no_external" = "Dış Altyazı Bulunamadı";
@@ -172,7 +233,6 @@
 
 "alert.fatal_error" = "Onulmaz hata: %@ \nUygulamadan şimdi çıkılacak.";
 "alert.mpv_error" = "İç hata: %@ (%@) %@ seçeneği hatalı.";
-"alert.sleep" = "Ekran uykusu engellenemiyor(0x%0X8)";
 
 "alert.unsupported_audio" = "Desteklenmeyen dış ses dosyası.";
 "alert.unsupported_sub" = "Desteklenmeyen dış altyazı.";
@@ -185,16 +245,20 @@
 "alert.error_saving_file" = "%@: %@ kaydedilirken hata oluştu!";
 "alert.error_deleting_file" = "Dosya silinemiyor.";
 
+"alert.target_peak.bad_value" = "The value \"%@\" is invalid.\nPlease provide a value betwen 10 and 10000, or 0.";
+
 "alert.config.new.title" = "Yeni Giriş Yapılandırması";
 "alert.config.new.message" = "Lütfen yeni yapılandırma için bir ad girin.";
 "alert.config.duplicate.title" = "Yapılandırmayı Çoğalt";
 "alert.config.duplicate.message" = "Lütfen çoğaltılan yapılandırma dosyası için bir ad girin.";
 "alert.config.empty_name" = "Ad alanı boş olamaz.";
-"alert.config.name_existing" = "Bu ad halihazırda alınmış.";
+"alert.config.name_existing" = "A config with the same name already exists.";
 "alert.config.file_existing.title" = "Dosya Halihazırda Var";
-"alert.config.file_existing.message" = "Bu olmamalıydı. Dosyanın üzerine yazmak için Tamam'ı, dosyayı Finder'da göstermek için Vazgeç'i seçin.";
+"alert.config.file_existing.message" = "A config file with the same filename already exists. Choose OK to show the file in Finder.";
 "alert.config.cannot_create" = "Yapılandırma dosyası oluşturulamıyor!\n%@";
 "alert.config.cannot_write" = "Yapılandırma dosyasına yazılamıyor!";
+"alert.config.rename.title" = "Rename Input Configuration";
+"alert.config.rename.message" = "Please enter the new name for the configuration.";
 
 "alert.filter.incorrect" = "Filtreler ayarlanırken hata oluştu. Lütfen parametre biçiminizi kontrol edin.";
 "alert.add_filter.title" = "Yeni Filtre";

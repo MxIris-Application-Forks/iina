@@ -7,7 +7,7 @@
 //
 
 import Cocoa
-import WebKit
+@preconcurrency import WebKit
 
 class PluginOverlayView: WKWebView, WKNavigationDelegate {
   weak private var pluginInstance: JavascriptPluginInstance!
@@ -66,6 +66,9 @@ class PluginOverlayView: WKWebView, WKNavigationDelegate {
       config.userContentController.add(pluginInstance.apis!["overlay"] as! WKScriptMessageHandler, name: "iina")
 
       let webView = PluginOverlayView(frame: .zero, configuration: config)
+      if #available(macOS 13.3, *) {
+        webView.isInspectable = true
+      }
       webView.pluginInstance = pluginInstance
       webView.navigationDelegate = webView
       webView.translatesAutoresizingMaskIntoConstraints = false

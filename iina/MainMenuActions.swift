@@ -9,7 +9,7 @@
 import Cocoa
 
 
-class MainMenuActionHandler: NSResponder {
+class MainMenuActionHandler: NSResponder, NSMenuItemValidation {
 
   unowned var player: PlayerCore
 
@@ -23,19 +23,19 @@ class MainMenuActionHandler: NSResponder {
   }
 
   @objc func menuShowInspector(_ sender: AnyObject) {
-    let inspector = (NSApp.delegate as! AppDelegate).inspector
+    let inspector = AppDelegate.shared.inspector
     inspector.showWindow(self)
-    inspector.updateInfo()
   }
 
   @objc func menuSavePlaylist(_ sender: NSMenuItem) {
     Utility.quickSavePanel(title: "Save to playlist", types: ["m3u8"], sheetWindow: player.currentWindow) { (url) in
       if url.isFileURL {
         var playlist = ""
-        for item in self.player.info.playlist {
-          playlist.append((item.filename + "\n"))
+        self.player.info.$playlist.withLock {
+          for item in $0 {
+            playlist.append((item.filename + "\n"))
+          }
         }
-
         do {
           try playlist.write(to: url, atomically: true, encoding: String.Encoding.utf8)
         } catch let error as NSError {
@@ -46,8 +46,13 @@ class MainMenuActionHandler: NSResponder {
     }
   }
 
+  @objc func menuShowCurrentFileInFinder(_ sender: NSMenuItem) {
+    guard let url = player.info.currentURL, !player.info.isNetworkResource else { return }
+    NSWorkspace.shared.activateFileViewerSelecting([url])
+  }
+
   @objc func menuDeleteCurrentFile(_ sender: NSMenuItem) {
-    guard let url = player.info.currentURL else { return }
+    guard let url = player.info.currentURL, !player.info.isNetworkResource else { return }
     do {
       let index = player.mpv.getInt(MPVProperty.playlistPos)
       player.playlistRemove(index)
@@ -85,8 +90,8 @@ extension MainMenuActionHandler {
 
   @objc func menuStop(_ sender: NSMenuItem) {
     // FIXME: handle stop
-    player.stop()
     player.sendOSD(.stop)
+    player.stop()
   }
 
   @objc func menuStep(_ sender: NSMenuItem) {
@@ -103,7 +108,7 @@ extension MainMenuActionHandler {
   }
 
   @objc func menuStepFrame(_ sender: NSMenuItem) {
-    if player.info.isPlaying {
+    if player.info.state == .playing {
       player.pause()
     }
     if sender.tag == 0 { // -> 1f
@@ -128,6 +133,8 @@ extension MainMenuActionHandler {
   }
 
   @objc func menuJumpTo(_ sender: NSMenuItem) {
+    // Make certain the cached video position in the playback info is up to date.
+    player.syncUI(.time)
     Utility.quickPromptPanel("jump_to", inputValue: self.player.info.videoPosition?.stringRepresentationWithPrecision(3)) { input in
       if let vt = VideoTime(input) {
         self.player.seek(absoluteSecond: vt.second)
@@ -277,7 +284,8 @@ extension MainMenuActionHandler {
         }
       }
     }
-    if let vfWindow = (NSApp.delegate as? AppDelegate)?.vfWindow, vfWindow.loaded {
+    let vfWindow = AppDelegate.shared.vfWindow
+    if vfWindow.loaded {
       vfWindow.reloadTable()
     }
   }
@@ -340,6 +348,14 @@ extension MainMenuActionHandler {
     }
   }
 
+  @objc func menuToggleSubVisibility(_ sender: NSMenuItem) {
+    player.toggleSubVisibility()
+  }
+
+  @objc func menuToggleSecondSubVisibility(_ sender: NSMenuItem) {
+    player.toggleSecondSubVisibility()
+  }
+
   @objc func menuChangeSubDelay(_ sender: NSMenuItem) {
     if let delayDelta = sender.representedObject as? Double {
       let newDelay = player.info.subDelay + delayDelta
@@ -398,14 +414,13 @@ extension MainMenuActionHandler {
         self.player.sendOSD(.downloadedSub(
           urls.map({ $0.lastPathComponent }).joined(separator: "\n")
         ))
-        self.player.info.haveDownloadedSub = true
       }
       self.player.isSearchingOnlineSubtitle = false
     }
   }
 
   @objc func saveDownloadedSub(_ sender: NSMenuItem) {
-    let selected = player.info.subTracks.filter { $0.id == player.info.sid }
+    let selected = player.info.$subTracks.withLock { $0.filter { $0.id == player.info.sid } }
     guard selected.count > 0 else {
       Utility.showAlert("sub.no_selected")
 
@@ -449,6 +464,49 @@ extension MainMenuActionHandler {
     case 1: player.mpv.command(.cycle, args: ["audio"])
     case 2: player.mpv.command(.cycle, args: ["sub"])
     default: break
+    }
+  }
+
+  func validateMenuItem(_ menuItem: NSMenuItem) -> Bool {
+    switch menuItem.action {
+    case #selector(menuDeleteCurrentFile(_:)), #selector(menuShowCurrentFileInFinder(_:)):
+      return player.info.currentURL != nil && !player.info.isNetworkResource
+    default:
+      break
+    }
+    return true
+  }
+
+  // MARK: - Plugin
+
+  @objc func showPluginsPanel(_ sender: NSMenuItem) {
+    player.mainWindow.showPluginSidebar(tab: nil)
+  }
+
+  @objc func reloadAllPlugins(_ sender: NSMenuItem) {
+    AppDelegate.shared.menuController.pluginMenu.removeAllItems()
+
+    for player in PlayerCore.playerCores {
+      player.clearPlugins()
+    }
+
+    JavascriptPlugin.recreateAllPlugins()
+    JavascriptPlugin.loadGlobalInstances()
+
+    for player in PlayerCore.playerCores {
+      for plugin in JavascriptPlugin.plugins {
+        player.reloadPlugin(plugin, forced: true)
+      }
+      // Try to emit the events that are already emitted.
+      // Of course this is not exhaustive, so users shouldn't rely on this function
+      if player.mainWindow.loaded {
+        player.events.emit(.windowLoaded)
+      }
+      player.events.emit(.mpvInitialized)
+      if player.info.state == .playing {
+        player.events.emit(.fileLoaded)
+        player.events.emit(.fileStarted)
+      }
     }
   }
 }

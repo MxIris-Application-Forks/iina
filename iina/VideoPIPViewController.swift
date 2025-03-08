@@ -8,14 +8,16 @@
 
 import Cocoa
 
-class VideoPIPViewController: PIPViewController {
+class VideoPIPViewController: PIPViewController, NSWindowDelegate {
+
+  private var currentScreen: NSScreen?
 
   /// Force a draw, if needed.
   ///
   /// If the image is changing there is no need to force a draw. However if playback is paused, or if playback is in progress but the video
   /// track is an album art still image then drawing is required.
   private func forceDraw() {
-    guard let controller = delegate as? MainWindowController, controller.player.info.isPaused
+    guard let controller = delegate as? MainWindowController, controller.player.info.state == .paused
             || controller.player.info.currentTrack(.video)?.isAlbumart ?? false else { return }
     controller.videoView.videoLayer.draw(forced: true)
   }
@@ -30,6 +32,12 @@ class VideoPIPViewController: PIPViewController {
   override func viewDidLayout() {
     super.viewDidLayout()
     forceDraw()
+    guard let window = view.window else {
+      // Internal error, should not occur.
+      Logger.log("VideoPIPViewController.viewDidLayout window is nil", level: .error)
+      return
+    }
+    window.delegate = self
   }
 
   /// Force a draw after exiting PiP.
@@ -39,5 +47,22 @@ class VideoPIPViewController: PIPViewController {
   override func viewDidDisappear() {
     super.viewDidDisappear()
     forceDraw()
+  }
+
+  /// PiP window has changed screens.
+  ///
+  /// When the PiP window moves to a new screen the configuration of the display link may need to be changed and the ability of the
+  /// screen to support HDR needs to be re-evaluated.
+  func windowDidChangeScreen(_ notification: Notification) {
+    let screen = self.view.window?.screen
+    guard currentScreen != screen else { return }
+    currentScreen = screen
+    NSScreen.log("PiP window moved to screen", screen)
+    guard let controller = self.delegate as? PlayerWindowController else {
+      // Internal error, should not occur.
+      Logger.log("VideoPIPViewController.windowDidChangeScreen delegate", level: .error)
+      return
+    }
+    controller.videoView.updateDisplayLink()
   }
 }

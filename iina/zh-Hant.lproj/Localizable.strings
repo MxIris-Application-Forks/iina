@@ -16,6 +16,9 @@
 "general.username" = "用戶名";
 "general.password" = "密碼";
 
+"input.value_is_empty" = "此項為必填項目。";
+"input.already_exists" = "此內容已經被其他項目使用。";
+
 // Guide Window
 "guide.highlights" = "更新亮點";
 "guide.basic_settings" = "基本設定";
@@ -27,6 +30,9 @@
 "initial.nightly.desc" = "不推薦您使用「每日構建版 Nightly Build」做為日常使用首選。每日構建版不支援自動更新，請至 <a href=\"https://nightly.iina.io\">每日構建版網站頁面</a> 自行下載更新。";
 "initial.debug.desc" = "開發版通常沒有將效能最佳化，所以不建議作為生產力軟件。開發版不支持自動更新。";
 "initial.bug_report" = "通過<a href=\"https://github.com/iina/iina/issues\">GitHub issues</a>發送報告.";
+
+// Inspector Window
+"inspector.error" = "錯誤";
 
 // MainWindowController.swift
 "main.buffering_indicator" = "緩衝處理中⋯ %d%%";
@@ -43,12 +49,43 @@
 "quicksetting.hwdec" = "硬體解碼";
 "quicksetting.deinterlace" = "去交錯";
 "quicksetting.hdr" = "高動態範圍成效";
+"quicksetting.hide" = "隱藏";
+"quicksetting.reset_speed" = "Reset speed to 1x";
+
+// EQ Presets
+"eq.preset.flat" = "Flat";
+"eq.preset.acoustic" = "Acoustic";
+"eq.preset.classical" = "Classical";
+"eq.preset.dance" = "Dance";
+"eq.preset.deep" = "Deep";
+"eq.preset.electronic" = "Electronic";
+"eq.preset.hip_hop" = "Hip Hop";
+"eq.preset.increase_bass" = "Increase Bass";
+"eq.preset.increase_treble" = "Increase Treble";
+"eq.preset.increase_vocal" = "Increase Vocal";
+"eq.preset.jazz" = "Jazz";
+"eq.preset.latin" = "Latin";
+"eq.preset.loundness" = "Loundness";
+"eq.preset.lounge" = "Lounge";
+"eq.preset.piano" = "Piano";
+"eq.preset.pop" = "Pop";
+"eq.preset.rnb" = "R&B";
+"eq.preset.reduce_bass" = "Reduce Bass";
+"eq.preset.reduce_treble" = "Reduce Treble";
+"eq.preset.rock" = "Rock";
+"eq.preset.small_speaker" = "Small Speaker";
+"eq.preset.spoken_word" = "Spoken Word";
+
+"alert.eq.new_profile.title" = "New EQ Profile";
+"alert.eq.new_profile.message" = "Please enter a profile name.";
+"alert.eq.rename.title" = "Rename Currnet Profile";
+"alert.eq.rename.message" = "Please enter a new profile name.";
 
 // OSDMessage.swift
 "osd.pause" = "暫停";
 "osd.resume" = "繼續";
 "osd.volume" = "音量：%i";
-"osd.speed" = "速度：%.2fx";
+"osd.speed" = "Speed: %@x";
 "osd.aspect" = "顯示比例：%@";
 "osd.crop" = "裁切：%@";
 "osd.rotate" = "旋轉：%i°";
@@ -61,6 +98,14 @@
 "osd.sub_delay.later" = "字幕延遲：延遲 %.2f 秒";
 "osd.sub_delay.earlier" = "字幕延遲：提前 %.2f 秒";
 "osd.subtitle_pos" = "字幕位置：%.1f";
+"osd.sub_hidden" = "Subtitles Hidden";
+"osd.sub_visible" = "Subtitles Visible";
+"osd.sub_second_delay.nodelay" = "Secondary Subtitle Delay: No Delay";
+"osd.sub_second_delay.later" = "Secondary Subtitle Delay: %.2fs Later";
+"osd.sub_second_delay.earlier" = "Secondary Subtitle Delay: %.2fs Earlier";
+"osd.sub_second_hidden" = "Secondary Subtitles Hidden";
+"osd.sub_second_pos" = "Secondary Subtitle Position: %.1f";
+"osd.sub_second_visible" = "Secondary Subtitles Visible";
 "osd.mute" = "靜音";
 "osd.unmute" = "取消靜音";
 "osd.screenshot" = "已儲存畫面截圖";
@@ -80,7 +125,8 @@
 "osd.find_online_sub" = "正在搜尋線上字幕⋯";
 "osd.find_online_sub.source" = "從";
 "osd.sub_not_found" = "找不到字幕";
-"osd.sub_found" = "已找到 %d 個字幕，下載中⋯";
+"osd.sub_found" = "%d subtitles found.";
+"osd.sub_downloading" = "Downloading %d subtitles";
 "osd.sub_downloaded" = "字幕下載完成";
 "osd.sub_saved" = "字幕已保存";
 "osd.network_error" = "網路連線錯誤";
@@ -116,14 +162,26 @@
 
 "preference.enable_adv_settings" = "啟用進階設定";
 
+"preference.sub_override_level.no" = "no";
 "preference.sub_override_level.force" = "force";
+"preference.sub_override_level.scale" = "scale";
 "preference.sub_override_level.strip" = "過濾";
 "preference.sub_override_level.yes" = "yes";
+
+"preference.sub_override_level.descriptive_text.no" = "Render subtitles as specified by the subtitle scripts, without overrides.";
+"preference.sub_override_level.descriptive_text.force" = "Apply all subtitle styles.";
+"preference.sub_override_level.descriptive_text.scale" = "Apply the scale setting in addition to the style settings in this section.";
+"preference.sub_override_level.descriptive_text.strip" = "Radically strip all ASS tags and styles from the subtitle.";
+"preference.sub_override_level.descriptive_text.yes" = "Apply all the style settings in this section.";
 
 "menu.volume" = "音量：%d";
 "menu.volume_muted" = "音量：%d (靜音)";
 "menu.audio_delay" = "音訊延遲：%.2f 秒";
 "menu.sub_delay" = "字幕延遲：%.2f 秒";
+"menu.sub_hide" = "Hide Subtitles";
+"menu.sub_show" = "Show Subtitles";
+"menu.sub_second_hide" = "Hide Secondary Subtitles";
+"menu.sub_second_show" = "Show Secondary Subtitles";
 "menu.fullscreen" = "進入全螢幕";
 "menu.exit_fullscreen" = "離開全螢幕";
 "menu.pip" = "進入子母畫面";
@@ -132,7 +190,7 @@
 "menu.exit_mini_player" = "離開音樂模式";
 "menu.pause" = "暫停";
 "menu.resume" = "繼續";
-"menu.speed" = "速度：%.2fx";
+"menu.speed" = "Speed: %@x";
 "menu.chapters" = "顯示章節面板";
 "menu.hide_chapters" = "隱藏章節面板";
 "menu.playlist" = "顯示播放列表面板";
@@ -146,8 +204,8 @@
 
 "menu.seek_forward" = "快轉 %.0fs";
 "menu.seek_backward" = "倒轉 %.0fs";
-"menu.speed_up" = "增加速度至 %.1fx";
-"menu.speed_down" = "減慢速度至 %.1fx";
+"menu.speed_up" = "Speed Up by %@x";
+"menu.speed_down" = "Speed Down by %@x";
 "menu.volume_up" = "音量 + %.0f%%";
 "menu.volume_down" = "音量 - %.0f%%";
 "menu.audio_delay_up" = "音訊延遲 + %.1f 秒";
@@ -155,10 +213,13 @@
 "menu.sub_delay_up" = "字幕延遲 + %.1f 秒";
 "menu.sub_delay_down" = "字幕延遲 - %.1f 秒";
 
-"menu.crop_custom" = "自訂...";
+"menu.crop_custom" = "自定⋯";
 "menu.find_online_sub" = "從 %@ 尋找線上字幕";
 
+"track.audio" = "音訊";
 "track.none" = "<無>";
+"track.sub" = "字幕";
+"track.video" = "視訊";
 
 "subtrack.no_loaded" = "沒有已載入的字幕";
 "subtrack.no_external" = "沒有找到外部字幕";
@@ -172,7 +233,6 @@
 
 "alert.fatal_error" = "ㄧ嚴重錯誤：%@ \n，IINA 即將關閉。";
 "alert.mpv_error" = "發生內部錯誤 %@（%@）（設定 %@ 時）";
-"alert.sleep" = "無法阻止顯示器睡眠！(0x%0X8)";
 
 "alert.unsupported_audio" = "不支援載入此音訊檔";
 "alert.unsupported_sub" = "不支援載入此字幕檔";
@@ -185,16 +245,20 @@
 "alert.error_saving_file" = "儲存檔案 %@ 時發生錯誤：%@";
 "alert.error_deleting_file" = "無法刪除此檔案";
 
+"alert.target_peak.bad_value" = "The value \"%@\" is invalid.\nPlease provide a value betwen 10 and 10000, or 0.";
+
 "alert.config.new.title" = "新增快速鍵設定檔";
 "alert.config.new.message" = "請輸入一個設定檔名稱";
 "alert.config.duplicate.title" = "複製設定檔";
 "alert.config.duplicate.message" = "請輸入複製的設定檔名稱";
 "alert.config.empty_name" = "名稱不能留空";
-"alert.config.name_existing" = "名稱已經存在";
+"alert.config.name_existing" = "A config with the same name already exists.";
 "alert.config.file_existing.title" = "檔案已經存在";
-"alert.config.file_existing.message" = "這不該發生。按一下「好」來覆寫，或是按一下「取消」在 Finder 中顯示檔案。";
+"alert.config.file_existing.message" = "A config file with the same filename already exists. Choose OK to show the file in Finder.";
 "alert.config.cannot_create" = "無法建立設定檔\n%@";
 "alert.config.cannot_write" = "無法寫入設定檔";
+"alert.config.rename.title" = "Rename Input Configuration";
+"alert.config.rename.message" = "Please enter the new name for the configuration.";
 
 "alert.filter.incorrect" = "設定濾鏡時出現錯誤，請檢查參數格式";
 "alert.add_filter.title" = "新增濾鏡";
